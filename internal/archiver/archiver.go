@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-shiori/warc/internal/processor"
+	"github.com/qrsforever/warc/internal/processor"
 	"github.com/sirupsen/logrus"
 	"go.etcd.io/bbolt"
 )

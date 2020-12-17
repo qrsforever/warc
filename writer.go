@@ -7,7 +7,7 @@ import (
 	"os"
 	fp "path/filepath"
 
-	"github.com/go-shiori/warc/internal/archiver"
+	"github.com/qrsforever/warc/internal/archiver"
 	"go.etcd.io/bbolt"
 )
 

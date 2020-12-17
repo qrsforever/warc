@@ -1,4 +1,4 @@
-module github.com/go-shiori/warc
+module github.com/qrsforever/warc
 
 go 1.12
 
