@@ -24,7 +24,7 @@ func init() {
             os.Exit(1)
         }
         httpClient = &http.Client{
-            Timeout: time.Minute,
+            Timeout: 3 * time.Second,
             Transport: &http.Transport{
                 TLSClientConfig: &tls.Config{
                     InsecureSkipVerify: true,
@@ -35,7 +35,7 @@ func init() {
         }
     } else {
         httpClient = &http.Client{
-            Timeout: time.Minute,
+            Timeout: 3 * time.Second,
             Transport: &http.Transport{
                 TLSClientConfig: &tls.Config{
                     InsecureSkipVerify: true,
