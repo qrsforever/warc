@@ -158,7 +158,7 @@ func (arc *Archiver) downloadPage(url string) (*http.Response, error) {
 
 	// Send request
 	req.Header.Set("User-Agent", arc.UserAgent)
-	return httpClient.Do(req)
+    return GetHttpClient().Do(req)
 }
 
 func (arc *Archiver) saveResource(resource processor.Resource, contentType string) error {

@@ -11,17 +11,45 @@ import (
 )
 
 var httpClient *http.Client
+var socks5Proxy = ""
 
 func init() {
 	jar, _ := cookiejar.New(nil)
 
-    socks5_proxy := os.Getenv("SOCKS5_PROXY")
-    if socks5_proxy != "" {
-        fmt.Fprintln(os.Stdout, "warc using socks5:", socks5_proxy)
-        dialer, err := proxy.SOCKS5("tcp", socks5_proxy, nil, proxy.Direct)
+    httpClient = &http.Client{
+        Timeout: 30 * time.Second,
+        Transport: &http.Transport{
+            TLSClientConfig: &tls.Config{
+                InsecureSkipVerify: true,
+            },
+        },
+        Jar: jar,
+    }
+}
+
+func GetHttpClient() *http.Client {
+    s5proxy := os.Getenv("SOCKS5_PROXY")
+    if s5proxy == socks5Proxy {
+        fmt.Fprintln(os.Stdout, "warc not change proxy")
+        return httpClient
+    }
+    if s5proxy == "" {
+        fmt.Fprintln(os.Stdout, "warc change to no proxy")
+        httpClient = &http.Client{
+            Timeout: 30 * time.Second,
+            Transport: &http.Transport{
+                TLSClientConfig: &tls.Config{
+                    InsecureSkipVerify: true,
+                },
+            },
+            Jar: jar,
+        }
+    } else {
+        fmt.Fprintln(os.Stdout, "warc change to no proxy:", s5proxy)
+        dialer, err := proxy.SOCKS5("tcp", s5proxy, nil, proxy.Direct)
         if err != nil {
             fmt.Fprintln(os.Stderr, "can't connect to the proxy:", err)
-            os.Exit(1)
+            return nil
         }
         httpClient = &http.Client{
             Timeout: 30 * time.Second,
@@ -31,18 +59,8 @@ func init() {
                 },
                 Dial: dialer.Dial,
             },
-            Jar: jar,
-        }
-    } else {
-        fmt.Fprintln(os.Stdout, "warc not using socks5:")
-        httpClient = &http.Client{
-            Timeout: 30 * time.Second,
-            Transport: &http.Transport{
-                TLSClientConfig: &tls.Config{
-                    InsecureSkipVerify: true,
-                },
-            },
-            Jar: jar,
         }
     }
+    socks5Proxy = s5proxy
+    return httpClient
 }
