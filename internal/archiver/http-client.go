@@ -34,6 +34,7 @@ func init() {
             Jar: jar,
         }
     } else {
+        fmt.Fprintln(os.Stdout, "warc not using socks5:")
         httpClient = &http.Client{
             Timeout: 30 * time.Second,
             Transport: &http.Transport{
