@@ -33,6 +33,7 @@ func GetHttpClient() *http.Client {
         fmt.Fprintln(os.Stdout, "warc not change proxy")
         return httpClient
     }
+	jar, _ := cookiejar.New(nil)
     if s5proxy == "" {
         fmt.Fprintln(os.Stdout, "warc change to no proxy")
         httpClient = &http.Client{
@@ -59,6 +60,7 @@ func GetHttpClient() *http.Client {
                 },
                 Dial: dialer.Dial,
             },
+            Jar: jar,
         }
     }
     socks5Proxy = s5proxy
