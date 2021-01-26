@@ -17,14 +17,14 @@ func init() {
 
     socks5_proxy := os.Getenv("SOCKS5_PROXY")
     if socks5_proxy != "" {
-        fmt.Fprintln(os.Stdout, "using socks5:", socks5_proxy)
+        fmt.Fprintln(os.Stdout, "warc using socks5:", socks5_proxy)
         dialer, err := proxy.SOCKS5("tcp", socks5_proxy, nil, proxy.Direct)
         if err != nil {
             fmt.Fprintln(os.Stderr, "can't connect to the proxy:", err)
             os.Exit(1)
         }
         httpClient = &http.Client{
-            Timeout: 3 * time.Second,
+            Timeout: 30 * time.Second,
             Transport: &http.Transport{
                 TLSClientConfig: &tls.Config{
                     InsecureSkipVerify: true,
@@ -35,7 +35,7 @@ func init() {
         }
     } else {
         httpClient = &http.Client{
-            Timeout: 3 * time.Second,
+            Timeout: 30 * time.Second,
             Transport: &http.Transport{
                 TLSClientConfig: &tls.Config{
                     InsecureSkipVerify: true,
